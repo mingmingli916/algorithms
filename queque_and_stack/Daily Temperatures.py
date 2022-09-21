@@ -13,30 +13,30 @@ from typing import List
 
 
 class Solution:
-    def dailyTemperatures(self, T: List[int]) -> List[int]:
-        length = len(T)
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        length = len(temperatures)
         # init
         # Store temperatures and it's index.
-        stack = [(T[length - 1], length - 1)]
-        T[length - 1] = 0
+        stack = [(temperatures[length - 1], length - 1)]
+        temperatures[length - 1] = 0
 
         for i in range(length - 2, -1, -1):
-            if T[i] < stack[-1][0]:
-                stack.append((T[i], i))
+            if temperatures[i] < stack[-1][0]:
+                stack.append((temperatures[i], i))
                 # Because the last put element is the nearest.
-                T[i] = 1
+                temperatures[i] = 1
                 continue
             # Only need to store the nearest maximum elements.
-            while stack and T[i] >= stack[-1][0]:
+            while stack and temperatures[i] >= stack[-1][0]:
                 stack.pop()
-            value = T[i]  # avoid value overwrite
+            value = temperatures[i]  # avoid value overwrite
             if not stack:
-                T[i] = 0
+                temperatures[i] = 0
             else:
-                T[i] = stack[-1][1] - i
+                temperatures[i] = stack[-1][1] - i
             stack.append((value, i))
 
-        return T
+        return temperatures
 
 
 if __name__ == '__main__':
