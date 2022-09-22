@@ -75,6 +75,32 @@ class Solution(object):
                     d.pop(node)
         return count
 
+    def numIslandsDFS(self, grid):
+        columns = len(grid)
+        rows = len(grid[0])
+        s = set()
+        for i in range(rows):
+            for j in range(columns):
+                if grid[j][i] == '1':
+                    s.add((j, i))
+
+        def helper(node, s):
+            s.remove(node)
+            for c, r in [(-1, 0), (0, -1), (1, 0), (0, 1)]:
+                nc = node[0] + c
+                nr = node[1] + r
+                if 0 <= nr <= rows - 1 and 0 <= nc <= columns - 1 and (nc, nr) in s:
+                    helper((nc, nr), s)
+
+        count = 0
+        while s:
+            count += 1
+            node = s.pop()
+            s.add(node)
+            helper(node, s)
+
+        return count
+
 
 if __name__ == '__main__':
     grid = [
