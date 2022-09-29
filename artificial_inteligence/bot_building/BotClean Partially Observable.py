@@ -31,16 +31,114 @@ Scoring
 The goal is to clean all the dirty cells in as few moves as possible. Your score is (200 - #bot moves)/25. All bots in this challenge will be given the same input. CLEAN is also considered a move.
 
 """
+import os
+
+filename = 'bot_memory.txt'
+
+
+def save_board(board):
+    """
+    Save board into bot memory.
+    :param board: board needed to be saved.
+    :return:
+    """
+    with open(filename, 'w') as fh:
+        for i in range(len(board)):
+            row = '' if i == 0 else '\n'
+            for j in range(len(board[i])):
+                if board[i][j] == 'b':
+                    # The bot position has been cleaned.
+                    row += '-'
+                else:
+                    row += board[i][j]
+            fh.write(row)
+
+
+def get_board():
+    """
+    Read board saved in memory.
+    :return:
+    """
+    memory_board = []
+    with open(filename) as fh:
+        board = fh.read().split('\n')
+        for i in range(len(board)):
+            row = list(board[i])
+            memory_board.append(row)
+    return memory_board
+
+
+def combine_board(board):
+    """
+    Combine current board with memory board.
+    :param board:
+    :return:
+    """
+    if not os.path.exists(filename):
+        return
+    memory_board = get_board()
+    for i in range(len(board)):
+        for j in range(len(board[i])):
+            if board[i][j] == 'o' and memory_board[i][j] != 'o':
+                board[i][j] = memory_board[i][j]
+
+
+def get_elements(board, elements):
+    lst = []
+    for i in range(len(board)):
+        for j in range(len(board[i])):
+            if board[i][j] in elements:
+                lst.append([i, j])
+    return lst
+
+
+def get_nearest(posx, posy, elements):
+    near_x, near_y = elements[0]
+    for x, y in elements:
+        if abs(posx - x) + abs(posy - y) < abs(posx - near_x) + abs(posy - near_y):
+            near_x = x
+            near_y = y
+    return near_x, near_y
 
 
 def next_move(posx, posy, board):
-    if board[posx][posy] == 'd':
-        print('CLEAN')
-
-
+    # Combine current board with memory board.
+    combine_board(board)
+    save_board(board)
+    elements = get_elements(board, ['d'])
+    if len(elements) == 0:
+        elements = get_elements(board, ['d', 'o'])
+    if elements:
+        near_x, near_y = get_nearest(posx, posy, elements)
+        if near_y > posy:
+            print('RIGHT')
+        elif near_y < posy:
+            print('LEFT')
+        elif near_x > posx:
+            print('DOWN')
+        elif near_x < posx:
+            print('UP')
+        else:
+            print('CLEAN')
 
 
 if __name__ == "__main__":
     pos = [int(i) for i in input().strip().split()]
     board = [[j for j in input().strip()] for i in range(5)]
     next_move(pos[0], pos[1], board)
+"""
+
+0 0
+bdooo
+-dooo
+ooooo
+ooooo
+ooooo
+
+0 1
+-d-oo
+-d-oo
+ooooo
+ooooo
+ooooo
+"""
