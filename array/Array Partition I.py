@@ -1,11 +1,4 @@
-#!/usr/bin/env python3
 """
-@project: leetcode
-@file: 20210308_array_partition_i
-@author: mike
-@time: 2021/3/8
-
-@function:
 Given an integer array nums of 2n integers, group these integers into n pairs (a1, b1), (a2, b2), ..., (an, bn)
 such that the sum of min(ai, bi) for all i is maximized. Return the maximized sum.
 
