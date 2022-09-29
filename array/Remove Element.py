@@ -36,14 +36,14 @@ from typing import List
 
 class Solution:
     def removeElement(self, nums: List[int], val: int) -> int:
-        length_ = len(nums) - 1
-        i = 0
-        while i <= length_:
-            if nums[i] == val:
-                if nums[length_] != val:
-                    nums[i] = nums[length_]
-                    i += 1
-                length_ -= 1
+        end = len(nums) - 1
+        start = 0
+        while start <= end:
+            if nums[start] == val:
+                if nums[end] != val:
+                    nums[start] = nums[end]
+                    start += 1
+                end -= 1
             else:
-                i += 1
-        return length_ + 1
+                start += 1
+        return end + 1
